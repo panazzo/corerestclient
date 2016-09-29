@@ -2,8 +2,6 @@ using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using Newtonsoft.Json.Linq;
-using Microsoft.Extensions.Configuration;
 
 namespace VstsTestManager.Utils
 {
@@ -47,7 +45,7 @@ namespace VstsTestManager.Utils
                     content.Headers.ContentType = new MediaTypeHeaderValue(this.contentType);
 
                     var response = client.PostAsync(uri, content).Result;
-                    return JObject.Parse(response.Content.ReadAsStringAsync().Result).ToString();
+                    return response.Content.ReadAsStringAsync().Result;
                 }
             }
         }
@@ -61,7 +59,7 @@ namespace VstsTestManager.Utils
                 var request = new HttpRequestMessage(method, uri) { Content = new StringContent(body, Encoding.UTF8, this.contentType) };
                 
                 var response = client.SendAsync(request).Result;
-                return JObject.Parse(response.Content.ReadAsStringAsync().Result).ToString();
+                return response.Content.ReadAsStringAsync().Result;
             }
 
         }
@@ -71,7 +69,7 @@ namespace VstsTestManager.Utils
             using (var client = GetHttpClient())
             {
                 var response = client.GetAsync(uri).Result;
-                return JObject.Parse(response.Content.ReadAsStringAsync().Result).ToString();
+                return response.Content.ReadAsStringAsync().Result;
             }
         }
 

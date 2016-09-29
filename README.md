@@ -1,2 +1,2 @@
 # corerestclient
-Simple .Net Core Native Rest Client
+A simple .net core **native** rest client.
