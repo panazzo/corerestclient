@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace VstsTestManager.Utils
+namespace corerestclient
 {
     public class RestClient
     {
