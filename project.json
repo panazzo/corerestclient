@@ -1,4 +1,4 @@
-{
+﻿{
   "version": "1.0.0-*",
 
   "dependencies": {
@@ -9,9 +9,5 @@
     "netstandard1.6": {
       "imports": "dnxcore50"
     }
-  },
-
-  "tooling": {
-    "defaultNamespace": "CoreRestClient"
   }
 }
