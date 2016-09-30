@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>corerestclient</id>
+    <id>corerestclientteste</id>
     <version>$version$</version>
     <title>CoreRestClient</title>
     <authors>Panazzo</authors>
