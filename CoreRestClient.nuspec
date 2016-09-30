@@ -3,7 +3,7 @@
   <metadata>
     <id>RestDotNetCoreClient</id>
     <version>$version$</version>
-    <title>CoreRestClient</title>
+    <title>RestDotNetCoreClient</title>
     <authors>Panazzo</authors>
     <owners>Panazzo</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
