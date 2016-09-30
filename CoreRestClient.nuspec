@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>corerestclient</id>
-    <version>$id$</version>
+    <version>$version$</version>
     <title>CoreRestClient</title>
     <authors>Panazzo</authors>
     <owners>Panazzo</owners>
