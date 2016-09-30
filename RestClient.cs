@@ -73,6 +73,16 @@ namespace VstsTestManager.Utils
             }
         }
 
+        public string Put(string uri, string resource, string content)
+        {
+            using (var client = GetHttpClient())
+            {
+                client.BaseAddress = new Uri(uri);
+                var requestContent = new StringContent(content, Encoding.UTF8, this.contentType);
+                return client.PutAsync(resource, requestContent).Result.Content.ReadAsStringAsync().Result;
+            }
+        }
+
         private HttpClient GetHttpClient()
         {
             var client = new HttpClient();
