@@ -8,6 +8,7 @@ namespace VstsTestManager.Utils
     public class RestClient
     {
         private string authToken;
+        private string authType;
 
         private string contentType;
         private bool hasAuth;
@@ -32,9 +33,21 @@ namespace VstsTestManager.Utils
             this.contentType = contentType;
         }
 
+        /* Adds generic constructor for multiple auth types like Bearer Basic etc. 
+         * OAuth/JWT example : Authorization : Bearer <TOKEN>
+         * Basic example : Authorization : Basic <TOKEN> 
+         */
+        public RestClient(string authType, string authToken, string contentType)
+        {
+            this.hasAuth = true;
+            this.authType = authType;
+            this.authToken = authToken;
+            this.contentType = contentType;
+        }
+
         public string Post(string uri, string body)
         {
-            var builder = new ConfigurationBuilder();
+            //var builder = new ConfigurationBuilder();
             
             byte[] byteData = Encoding.UTF8.GetBytes(body);
 
@@ -86,9 +99,18 @@ namespace VstsTestManager.Utils
         private HttpClient GetHttpClient()
         {
             var client = new HttpClient();
+
             if(this.hasAuth)
             {
-                client.DefaultRequestHeaders.Add("Authorization", this.authToken);
+                if (String.IsNullOrWhiteSpace(this.authType))
+                {
+                    // Old school Basic Auth
+                    client.DefaultRequestHeaders.Add("Authorization", this.authToken);
+                }
+                else
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authType, authToken);
+                }
             }
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(this.contentType));
