@@ -34,8 +34,6 @@ namespace VstsTestManager.Utils
 
         public string Post(string uri, string body)
         {
-            var builder = new ConfigurationBuilder();
-            
             byte[] byteData = Encoding.UTF8.GetBytes(body);
 
             using (var client = GetHttpClient())
