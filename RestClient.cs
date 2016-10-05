@@ -8,9 +8,23 @@ namespace corerestclient
     public class RestClient
     {
         private string authToken;
-
         private string contentType;
         private bool hasAuth;
+        private HttpClient client = new HttpClient();
+        
+        private HttpClient Client
+        {
+            get 
+            {
+                if(this.hasAuth)
+                {
+                    this.client.DefaultRequestHeaders.Add("Authorization", this.authToken);
+                }
+                this.client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(this.contentType));
+
+                return this.client;
+            }
+        }
 
         public RestClient()
         {
@@ -35,63 +49,35 @@ namespace corerestclient
         public string Post(string uri, string body)
         {
             byte[] byteData = Encoding.UTF8.GetBytes(body);
-
-            using (var client = GetHttpClient())
+            using (var content = new ByteArrayContent(byteData))
             {
-                using (var content = new ByteArrayContent(byteData))
-                {
-                    content.Headers.ContentType = new MediaTypeHeaderValue(this.contentType);
+                content.Headers.ContentType = new MediaTypeHeaderValue(this.contentType);
 
-                    var response = client.PostAsync(uri, content).Result;
-                    return response.Content.ReadAsStringAsync().Result;
-                }
+                var response = Client.PostAsync(uri, content).Result;
+                return response.Content.ReadAsStringAsync().Result;
             }
         }
 
         public string Patch(string uri, string body)
         {
-            using (var client = GetHttpClient())
-            {
+            var method = new HttpMethod("PATCH");
+            var request = new HttpRequestMessage(method, uri) { Content = new StringContent(body, Encoding.UTF8, this.contentType) };
                 
-                var method = new HttpMethod("PATCH");
-                var request = new HttpRequestMessage(method, uri) { Content = new StringContent(body, Encoding.UTF8, this.contentType) };
-                
-                var response = client.SendAsync(request).Result;
-                return response.Content.ReadAsStringAsync().Result;
-            }
-
+            var response = Client.SendAsync(request).Result;
+            return response.Content.ReadAsStringAsync().Result;
         }
 
         public string Get(string uri)
         {
-            using (var client = GetHttpClient())
-            {
-                var response = client.GetAsync(uri).Result;
-                return response.Content.ReadAsStringAsync().Result;
-            }
+            var response = Client.GetAsync(uri).Result;
+            return response.Content.ReadAsStringAsync().Result;
         }
 
         public string Put(string uri, string resource, string content)
         {
-            using (var client = GetHttpClient())
-            {
-                client.BaseAddress = new Uri(uri);
-                var requestContent = new StringContent(content, Encoding.UTF8, this.contentType);
-                return client.PutAsync(resource, requestContent).Result.Content.ReadAsStringAsync().Result;
-            }
-        }
-
-        private HttpClient GetHttpClient()
-        {
-            var client = new HttpClient();
-            if(this.hasAuth)
-            {
-                client.DefaultRequestHeaders.Add("Authorization", this.authToken);
-            }
-
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(this.contentType));
-
-            return client;
+            Client.BaseAddress = new Uri(uri);
+            var requestContent = new StringContent(content, Encoding.UTF8, this.contentType);
+            return Client.PutAsync(resource, requestContent).Result.Content.ReadAsStringAsync().Result;
         }
     }
 }
