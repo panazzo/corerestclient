@@ -100,5 +100,11 @@ namespace corerestclient
             var requestContent = new StringContent(content, Encoding.UTF8, this.contentType);
             return Client.PutAsync(resource, requestContent).Result.Content.ReadAsStringAsync().Result;
         }
+
+        public string Delete(string uri)
+        {
+            var response = Client.DeleteAsync(uri).Result;
+            return response.Content.ReadAsStringAsync().Result;
+        }
     }
 }
