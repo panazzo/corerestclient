@@ -20,6 +20,10 @@ namespace corerestclient
                 {
                     this.client.DefaultRequestHeaders.Add("Authorization", this.authToken);
                 }
+                else 
+                {
+                	this.client.DefaultRequestHeaders.Remove("Authorization");
+                }
                 this.client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(this.contentType));
 
                 return this.client;
