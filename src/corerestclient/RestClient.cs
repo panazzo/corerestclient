@@ -9,7 +9,7 @@ namespace corerestclient
     {
         private string authToken;
 		private string authType;
-        private string contentType;
+        public string contentType {get; set;}
         private bool hasAuth;
         private HttpClient client;
         
