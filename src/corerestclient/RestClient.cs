@@ -11,7 +11,7 @@ namespace corerestclient
 		private string authType;
         private string contentType;
         private bool hasAuth;
-        private HttpClient client = new HttpClient();
+        private HttpClient client;
         
         private HttpClient Client
         {
@@ -35,36 +35,40 @@ namespace corerestclient
             }
         }
 
-        public RestClient()
+        public RestClient(HttpMessageHandler handler = null)
         {
             this.hasAuth = false;
-            this.contentType = "application/json";
+            this.contentType = "application/json";            
+            this.client = handler != null ? new HttpClient(handler) : new HttpClient();
         }
 
-        public RestClient(string basicAuthToken)
+        public RestClient(string basicAuthToken, HttpMessageHandler handler = null)
         {
             this.hasAuth = true;
             this.authToken = basicAuthToken;
             this.contentType = "application/json";
+            this.client = handler != null ? new HttpClient(handler) : new HttpClient();
         }
 
-        public RestClient(string basicAuthToken, string contentType)
+        public RestClient(string basicAuthToken, string contentType, HttpMessageHandler handler = null)
         {
             this.hasAuth = true;
             this.authToken = basicAuthToken;
             this.contentType = contentType;
+            this.client = handler != null ? new HttpClient(handler) : new HttpClient();
         }
 
         /* Adds generic constructor for multiple auth types like Bearer Basic etc. 
          * OAuth/JWT example : Authorization : Bearer <TOKEN>
          * Basic example : Authorization : Basic <TOKEN> 
          */
-        public RestClient(string authType, string authToken, string contentType)
+        public RestClient(string authType, string authToken, string contentType, HttpMessageHandler handler = null)
         {
             this.hasAuth = true;
             this.authType = authType;
             this.authToken = authToken;
             this.contentType = contentType;
+            this.client = handler != null ? new HttpClient(handler) : new HttpClient();
         }
 
         public string Post(string uri, string body)
@@ -81,7 +85,7 @@ namespace corerestclient
 
         public string Patch(string uri, string body)
         {
-            var method = new HttpMethod("PATCH");
+            var method = new HttpMethod("PATCH");            
             var request = new HttpRequestMessage(method, uri) { Content = new StringContent(body, Encoding.UTF8, this.contentType) };
                 
             var response = Client.SendAsync(request).Result;
