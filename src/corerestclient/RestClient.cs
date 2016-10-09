@@ -96,7 +96,7 @@ namespace corerestclient
 
         public string Put(string uri, string resource, string content)
         {
-            Client.BaseAddress = new Uri(uri);
+            client.BaseAddress = new Uri(uri);
             var requestContent = new StringContent(content, Encoding.UTF8, this.contentType);
             return Client.PutAsync(resource, requestContent).Result.Content.ReadAsStringAsync().Result;
         }
